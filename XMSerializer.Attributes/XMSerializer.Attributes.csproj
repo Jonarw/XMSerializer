@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.0;net45</TargetFrameworks>
+    <LangVersion>8</LangVersion>
+    <RootNamespace>XmSerializer</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Jonathan Arweck</Authors>
+    <Copyright>Jonathan Arweck</Copyright>
+    <Description>XMSerializer is a library that facilitates XML serialization of complex .NET object graphs. This package contains the Attributes that can be used to annotate .NET objects in order to set up serialization.</Description>
+    <PackageProjectUrl>https://github.com/Jonarw/XMSerializer</PackageProjectUrl>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>XMSerializer.Attributes.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <LangVersion>8</LangVersion>
+    <RootNamespace>XmSerializer</RootNamespace>
+    <Description>XMSerializer is a library that facilitates XML serialization of complex .NET object graphs.</Description>
+    <Authors>Jonathan Arweck</Authors>
+    <Copyright>Jonathan Arweck</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Jonarw/XMSerializer</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>XMSerializer.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XMSerializer.Attributes\XMSerializer.Attributes.csproj" />
+  </ItemGroup>
+
+</Project>
