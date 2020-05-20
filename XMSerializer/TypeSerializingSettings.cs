@@ -25,7 +25,7 @@ namespace XmSerializer
         public bool IsDictionary { get; set; }
         public bool SkipConstructor { get; set; } = true;
         public bool IncludeAncestors { get; set; } = true;
-        public IList<string> LegacyNames { get; } = new List<string>();
+        public IList<string> LegacyNames { get; set; } = new List<string>();
         public Type Type { get; }
 
         public IReadOnlyList<MemberSerializingSettings> Members
