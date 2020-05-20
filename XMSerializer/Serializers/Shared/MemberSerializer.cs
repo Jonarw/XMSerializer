@@ -89,9 +89,7 @@ namespace XmSerializer.Serializers
                 var memberTypeSettings = this.SerializerModel.GetTypeSettings(memberType);
 
                 foreach (var serializer in this.SerializerModel.SharedSerializers.Where(s => s.CanSerialize(memberTypeSettings)))
-                    serializer.Deserialize(member, memberXml, memberType, memberTypeSettings);
-
-                return;
+                    serializer.Deserialize(member, objectXml, memberType, memberTypeSettings);
             }
 
             foreach (var memberSetting in this.GetAllMembers(typeSettings).Where(ms => !processedMembers.Contains(ms)))

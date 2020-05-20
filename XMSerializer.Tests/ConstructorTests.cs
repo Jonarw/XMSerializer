@@ -13,9 +13,12 @@ namespace XmSerializer.Tests
             s.AddType(typeof(SkipInstantiatingTestClass));
 
             var obj = new SkipInstantiatingTestClass();
+            obj.TestList.Add("test");
             var xml = s.Serialize(obj);
             var result = s.Deserialize<SkipInstantiatingTestClass>(xml);
             Assert.AreEqual("foobar", result.TestList[0]);
+            Assert.AreEqual("test", result.TestList[1]);
+            Assert.AreEqual(2, result.TestList.Count);
         }
 
         [TestMethod]
