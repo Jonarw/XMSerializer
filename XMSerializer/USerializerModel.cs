@@ -11,15 +11,14 @@ namespace XmSerializer
 {
     public class XmSerializerModel
     {
-        public const string IdTag = "id";
-        public const string RefTag = "ref";
-        public const string TypeTag = "type";
-        public const string ObjectTag = "object";
         public const string ArraySuffix = "[]";
         public const char GenericDelimiterLeft = '{';
-        public const char GenericDelimiterRight = '}';
         public const char GenericDelimiterMiddle = ',';
-
+        public const char GenericDelimiterRight = '}';
+        public const string IdTag = "id";
+        public const string ObjectTag = "object";
+        public const string RefTag = "ref";
+        public const string TypeTag = "type";
         private readonly object Lock = new object();
 
         private int noIdCounter;
@@ -219,6 +218,7 @@ namespace XmSerializer
             foreach (var serializer in this.SharedSerializers.Where(s => s.CanSerialize(typeSettings)))
                 serializer.Deserialize(ret, xml, type, typeSettings);
 
+            this.InitializeMembers(ret);
             return ret;
         }
 
@@ -458,6 +458,12 @@ namespace XmSerializer
             return ret;
         }
 
+        private static void InvokeWithNullParameters(MethodInfo method, object instance)
+        {
+            var noParamters = method.GetParameters().Length;
+            method.Invoke(instance, new object[noParamters]);
+        }
+
         private object CreateObject(XElement xml, out Type type, out TypeSerializingSettings typeSettings)
         {
             var typeAlias = (string)xml.Attribute(TypeTag);
@@ -480,10 +486,35 @@ namespace XmSerializer
             return ret;
         }
 
-        private static void InvokeWithNullParameters(MethodInfo method, object instance)
+        private void InitializeMembers(object obj)
         {
-            var noParamters = method.GetParameters().Length;
-            method.Invoke(instance, new object[noParamters]);
+            var type = obj.GetType();
+            var attributeType = typeof(InitializeAfterDeserializationAttribute);
+            var fields = type.GetAllInstanceFields()
+                .Select(f => (attribute: (InitializeAfterDeserializationAttribute)Attribute.GetCustomAttribute(f, attributeType), field: f))
+                .Where(tuple => tuple.attribute != null);
+
+            foreach (var (attribute, field) in fields)
+            {
+                var initType = attribute.InitializationType ?? field.FieldType;
+                if (initType.IsAbstract)
+                    throw new Exception($"Cannot initialize abstract type {initType}.");
+
+                if (!field.FieldType.IsAssignableFrom(initType))
+                    throw new Exception($"Cannot assign {initType} to {field.FieldType}.");
+
+                object initValue;
+                try
+                {
+                    initValue = Activator.CreateInstance(initType, true);
+                }
+                catch (MissingMethodException e)
+                {
+                    throw new Exception($"No parameterless constructor found on {initType}", e);
+                }
+
+                field.SetValue(obj, initValue);
+            }
         }
     }
 }
