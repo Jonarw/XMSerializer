@@ -173,9 +173,9 @@ namespace XmSerializer
                         var methods = obj.GetType().GetAllInstanceMethods();
                         foreach (var method in methods)
                         {
-                            if (Attribute.IsDefined(method, typeof(System.Runtime.Serialization.OnDeserializedAttribute)))
+                            if (Attribute.IsDefined(method, typeof(System.Runtime.Serialization.OnDeserializedAttribute), false))
                                 yield return (obj, method, 0);
-                            else if (Attribute.GetCustomAttribute(method, typeof(OnDeserializedAttribute)) is OnDeserializedAttribute att)
+                            else if (Attribute.GetCustomAttribute(method, typeof(OnDeserializedAttribute), false) is OnDeserializedAttribute att)
                                 yield return (obj, method, att.Priority);
                         }
                     }
@@ -357,7 +357,7 @@ namespace XmSerializer
             }
 
             foreach (var method in instance.GetType().GetAllInstanceMethods()
-                .Where(m => Attribute.IsDefined(m, typeof(OnDeserializingAttribute)) || Attribute.IsDefined(m, typeof(System.Runtime.Serialization.OnDeserializingAttribute))))
+                .Where(m => Attribute.IsDefined(m, typeof(OnDeserializingAttribute), false) || Attribute.IsDefined(m, typeof(System.Runtime.Serialization.OnDeserializingAttribute), false)))
             {
                 InvokeWithNullParameters(method, instance);
             }
@@ -373,7 +373,7 @@ namespace XmSerializer
             }
 
             foreach (var method in instance.GetType().GetAllInstanceMethods()
-                .Where(m => Attribute.IsDefined(m, typeof(OnSerializingAttribute)) || Attribute.IsDefined(m, typeof(System.Runtime.Serialization.OnSerializingAttribute))))
+                .Where(m => Attribute.IsDefined(m, typeof(OnSerializingAttribute), false) || Attribute.IsDefined(m, typeof(System.Runtime.Serialization.OnSerializingAttribute), false)))
             {
                 InvokeWithNullParameters(method, instance);
             }
@@ -390,7 +390,7 @@ namespace XmSerializer
                 foreach (var o in this.objectDictionary.Keys)
                 {
                     foreach (var method in o.GetType().GetAllInstanceMethods()
-                        .Where(m => Attribute.IsDefined(m, typeof(OnSerializedAttribute)) || Attribute.IsDefined(m, typeof(System.Runtime.Serialization.OnSerializedAttribute))))
+                        .Where(m => Attribute.IsDefined(m, typeof(OnSerializedAttribute), false) || Attribute.IsDefined(m, typeof(System.Runtime.Serialization.OnSerializedAttribute), false)))
                     {
                         InvokeWithNullParameters(method, o);
                     }

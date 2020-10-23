@@ -78,6 +78,70 @@ namespace XmSerializer.Tests
             Assert.AreEqual("OnDeserialized", result.DeSerializeTestValue2);
         }
 
+        [TestMethod]
+        public void TestOverriddedCallbacks()
+        {
+            var serializer = new XmSerializerModel();
+            serializer.AddType(typeof(OverriddenCallbackTestClass1));
+            serializer.AddType(typeof(OverriddenCallbackTestClass2));
+
+            var instance = new OverriddenCallbackTestClass2();
+            var xml = serializer.Serialize(instance);
+            var result = serializer.Deserialize<OverriddenCallbackTestClass2>(xml);
+            Assert.AreEqual(11, result.FooCounter);
+            Assert.AreEqual(11, result.BarCounter);
+            Assert.AreEqual(22, result.FooBarCounter);
+        }
+
+        [SerializableType]
+        public abstract class OverriddenCallbackTestClass1
+        {
+            public int FooCounter = 0;
+            public int BarCounter = 0;
+            public int FooBarCounter = 0;
+
+            [OnDeserialized]
+            public virtual void Foo()
+            {
+                this.FooCounter++;
+            }                       
+
+            public virtual void Bar()
+            {
+                this.BarCounter++;
+            }
+
+            [OnDeserialized]
+            public virtual void FooBar()
+            {
+                this.FooBarCounter++;
+            }
+        }
+
+        [SerializableType]
+        public class OverriddenCallbackTestClass2 : OverriddenCallbackTestClass1
+        {
+            public override void Foo()
+            {
+                this.FooCounter += 10;
+                base.Foo();
+            }
+
+            [OnDeserialized]
+            public override void Bar()
+            {
+                this.BarCounter += 10;
+                base.Bar();
+            }
+
+            [OnDeserialized]
+            public override void FooBar()
+            {
+                this.FooBarCounter += 10;
+                base.FooBar();
+            }
+        }
+
         [SerializableType(ImplicitMemberFilter = MemberFilter.PublicFields)]
         public class CallbackTestClass
         {
