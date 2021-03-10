@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace XmSerializer.Serializers
@@ -24,6 +25,7 @@ namespace XmSerializer.Serializers
             {typeof(float), sizeof(float)},
             {typeof(short), sizeof(short)},
             {typeof(ushort), sizeof(ushort)},
+            {typeof(Complex), sizeof(double) * 2},
         };
 
         public CompactArraySerializer(XmSerializerModel serializerModel) : base(serializerModel)
