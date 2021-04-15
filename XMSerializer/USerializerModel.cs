@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -27,7 +26,6 @@ namespace XmSerializer
         private IDictionary<object, int> objectDictionary;
         private IDictionary<int, object> objectDictionary2;
 
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public XmSerializerModel()
         {
             this.AddType(new TypeSerializingSettings(nameof(Object), typeof(object)));
@@ -42,6 +40,7 @@ namespace XmSerializer
             new MemberSerializer(this);
             new CollectionSerializer(this);
             new DictionarySerializer(this);
+            new ComplexSerializer(this);
         }
 
         public IList<IExclusiveSerializer> ExclusiveSerializers { get; } = new List<IExclusiveSerializer>();
