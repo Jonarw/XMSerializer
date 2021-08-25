@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XmSerializer
+namespace XmSerializer.Extensions
 {
     public static class ObjectExtensions
     {

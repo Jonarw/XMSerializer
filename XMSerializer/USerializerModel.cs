@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
 using XmSerializer.Serializers;
+using XmSerializer.Extensions;
 
 namespace XmSerializer
 {
