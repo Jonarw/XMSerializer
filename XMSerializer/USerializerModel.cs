@@ -150,6 +150,26 @@ namespace XmSerializer
                 }
             }
 
+            var onDiscoveryMethods = type.GetStaticMethods()
+                .Where(m => Attribute.IsDefined(m, typeof(OnTypeDiscoveryAttribute), false));
+
+            foreach (var method in onDiscoveryMethods)
+            {
+                var parameters = method.GetParameters();
+                if (parameters.Length == 0)
+                {
+                    method.Invoke(null, null);
+                }
+                else if (parameters.Length == 1 && parameters[0].ParameterType == typeof(TypeSerializingSettings))
+                {
+                    method.Invoke(null, new object[] {settings});
+                }
+                else
+                {
+                    throw new Exception($"Method {method.Name} on type {type.Name} has an invalid signature and cannot be used as an OnTypeDiscovery method.");
+                } 
+            }
+
             this.AddType(settings);
         }
 

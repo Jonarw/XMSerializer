@@ -8,6 +8,7 @@ namespace XmSerializer.Extensions
     public static class TypeExtensions
     {
         private const BindingFlags instanceFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+        private const BindingFlags staticFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly;
 
         public static IEnumerable<FieldInfo> GetAllInstanceFields(this Type type)
         {
@@ -38,6 +39,14 @@ namespace XmSerializer.Extensions
                 {
                     yield return method;
                 }
+            }
+        }
+
+        public static IEnumerable<MethodInfo> GetStaticMethods(this Type type)
+        {
+            foreach (var method in type.GetMethods(staticFlags))
+            {
+                yield return method;
             }
         }
 
