@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Reflection;
+using XmSerializer.Extensions;
 
 namespace XmSerializer.Tests
 {

@@ -99,7 +99,8 @@ namespace XmSerializer.Tests
                 TestLong = 403023,
                 TestUint = 2131,
                 TestUlong = 34535434,
-                TestDecimal = new decimal(-3.5234234)
+                TestDecimal = new decimal(-3.5234234),
+                TestChar = 'f',
             };
 
             var result = TestSerialization(dto, serializer);
@@ -177,6 +178,7 @@ namespace XmSerializer.Tests
             public TimeSpan TestTimeSpan;
             public uint TestUint;
             public ulong TestUlong;
+            public char TestChar;
         }
     }
 }

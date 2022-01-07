@@ -21,6 +21,7 @@ namespace XmSerializer.Serializers
         public const string DecimalTag = "decimal";
         public const string FloatTag = "float";
         public const string ValueTag = "value";
+        public const string CharTag = "char";
         public static readonly Dictionary<Type, string> Primitives2;
 
         public static readonly Dictionary<string, Type> Primitives = new Dictionary<string, Type>
@@ -39,6 +40,7 @@ namespace XmSerializer.Serializers
             {DateTimeOffsetTag, typeof(DateTimeOffset)},
             {TimeSpanTag, typeof(TimeSpan)},
             {ShortTag, typeof(short)},
+            {CharTag, typeof(char)},
         };
 
         static PrimitivesSerializer()
@@ -83,6 +85,7 @@ namespace XmSerializer.Serializers
                 FloatTag => (float)xml.Attribute(ValueTag),
                 DateTimeOffsetTag => (DateTimeOffset)xml.Attribute(ValueTag),
                 ShortTag => (short)xml.Attribute(ValueTag),
+                CharTag => (char)(int)xml.Attribute(ValueTag),
                 _ => throw new Exception($"Primitive {name} not found."),
             };
         }
@@ -90,7 +93,15 @@ namespace XmSerializer.Serializers
         public override XElement Serialize(object instance, Type type)
         {
             var ret = new XElement(Primitives2[type]);
-            ret.SetAttributeValue(ValueTag, instance);
+            if (instance is char ch)
+            {
+                ret.SetAttributeValue(ValueTag, (int)ch);
+            }
+            else
+            {
+                ret.SetAttributeValue(ValueTag, instance);
+            }
+
             return ret;
         }
     }
